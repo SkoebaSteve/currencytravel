@@ -1,0 +1,19 @@
+{
+  "name": "currencytravel",
+  "version": "1.0.0",
+  "description": "a tool to choose your next travel destination based on the best exchange rates",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/SkoebaSteve/currencytravel.git"
+  },
+  "author": "Steef Janssen",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/SkoebaSteve/currencytravel/issues"
+  },
+  "homepage": "https://github.com/SkoebaSteve/currencytravel#readme"
+}
