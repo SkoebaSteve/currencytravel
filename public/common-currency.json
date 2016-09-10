@@ -1,4 +1,4 @@
-{
+[{
     "USD": {
         "symbol": "$",
         "name": "US Dollar",
@@ -1061,4 +1061,4 @@
         "code": "ZMK",
         "name_plural": "Zambian kwachas"
     }
-}
+}]
