@@ -13,6 +13,14 @@ app.get('/api/common-currency', function(req, res){
   res.sendFile(__dirname + '/data/currencies.json');
 })
 
+app.get('/api/current-rate', function(req, res){
+  res.sendFile(__dirname + '/data/livecurrencies.json');
+})
+
+app.get('/api/historical-rate', function(req, res){
+  res.sendFile(__dirname + '/data/historicalcurrencies.json');
+})
+
 app.get('*', function(req, res){
   res.sendFile(__dirname + '/public/index.html');
 

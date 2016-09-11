@@ -1,7 +1,5 @@
-{{message}}
-
-<form action="">
-  <select ng-model="SelectedCurrency" ng-options="item as item.name for item in ListOfCurrencies">
+<form action="" name="currencySelectionForm" method="post" ng-submit="findCurrencies(currencySelectionForm)">
+  <select ng-model="SelectedCurrency" ng-options="item as item.name for item in ListOfCurrencies" required>
     <option value="">Select Currency</option>
   </select>
 
