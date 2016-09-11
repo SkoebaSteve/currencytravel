@@ -19,6 +19,12 @@
     return $resource('/api/common-currency', {}, {});
   })
 
+  currencyApp.factory('LiveCurrencies', function($resource){
+    return $resource('/api/live-currency/:id', {id: '@_id'}, {
+
+    });
+  })
+
   // create the controller and inject Angular's $scope
   currencyApp.controller('mainController', function($scope, ListOfCurrencies) {
     // create a message to display in our view
