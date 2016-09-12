@@ -5,12 +5,12 @@
 <div style="display:flex">
   <div>
     <div ng-repeat="currency in CurrentExchangeRate">
-      {{currency.name}} - {{currency.code}} - {{currency.currentRate}}
+      {{currency.name}} - {{currency.code}} - {{currency.currentRate / calculatorCurrent}}
     </div>
   </div>
   <div>
     <div ng-repeat="currency in HistoricalExchangeRate">
-      {{currency.name}} - {{currency.code}} - {{currency.currentRate}}
+      {{currency.name}} - {{currency.code}} - {{currency.currentRate / calculatorHistorical}}
     </div>
   </div>
 </div>
