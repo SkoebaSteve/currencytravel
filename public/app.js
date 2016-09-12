@@ -30,12 +30,6 @@
     });
   });
 
-  currencyApp.factory('HistoricalCurrencies', function($resource){
-    return $resource('/api/historical-rate', {id: '@_id'}, {
-      'query': { method: 'GET',isArray: false}
-    });
-  });
-
   // create the controller and inject Angular's $scope
   currencyApp.controller('MainController', function($scope, ListOfCurrencies) {
 
@@ -52,20 +46,41 @@
   currencyApp.controller('CurrencyController', function($scope, ListOfCurrencies, LiveCurrencies, HistoricalCurrencies) {
 
     var currencyWithValues = [];
+
     $scope.ListOfCurrencies = ListOfCurrencies.query(function(data){
       for(var i in data){
-        console.log(data[i].cc);
-        // console.log(data[i].name);
+        var currencyObject = {
+          code:data[i].cc,
+          name:data[i].name,
+          currentRate:0,
+          historicalRate:0
+        }
+        currencyWithValues.push(currencyObject);
       }
     });
 
     $scope.LiveCurrencies = LiveCurrencies.query(function(data){
-      // for(var i in data.quotes){
-      //   console.log(i);
-      //   console.log(data.quotes[i]);
-      // }
-    });
-    $scope.HistoricalCurrencies = HistoricalCurrencies.query(function(data){});
 
+      for(var i in data.quotes){
+
+        for(var c in currencyWithValues){
+          if(currencyWithValues[c].code === i.substring(3)){
+            currencyWithValues[c].currentRate = data.quotes[i];
+          }
+        }
+      }
+    });
+
+    $scope.HistoricalCurrencies = HistoricalCurrencies.query(function(data){
+
+      for(var i in data.quotes){
+
+        for(var c in currencyWithValues){
+          if(currencyWithValues[c].code === i.substring(3)){
+            currencyWithValues[c].historicalRate = data.quotes[i];
+          }
+        }
+      }
+    });
   });
 
