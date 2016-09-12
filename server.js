@@ -14,11 +14,7 @@ app.get('/api/common-currency', function(req, res){
 })
 
 app.get('/api/current-rate', function(req, res){
-  res.sendFile(__dirname + '/data/livecurrencies.json');
-})
-
-app.get('/api/historical-rate', function(req, res){
-  res.sendFile(__dirname + '/data/historicalcurrencies.json');
+  res.sendFile(__dirname + '/data/latestCurrencies.json');
 })
 
 app.get('*', function(req, res){

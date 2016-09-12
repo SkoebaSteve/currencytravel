@@ -2,15 +2,17 @@
   <option value="">Select Currency</option>
 </select>
 
-<div style="display:flex">
-  <div>
+<div>
+  <table>
     <div ng-repeat="currency in CurrentExchangeRate">
-      {{currency.name}} - {{currency.code}} - {{currency.currentRate / calculatorCurrent}}
+      <p style="font-weight:bold">{{currency.name}} ({{currency.code}})</p>
+      <p>current Rate: {{currency.currentRate / calculatorCurrent}}</p>
+      <p>historical Rate: {{currency.historicalRate / calculatorHistorical}}</p>
+      <!-- {{(100*count/total)| number:0}}% -->
+      <p>difference: {{ 
+        (currency.currentRate / calculatorCurrent) / (currency.historicalRate / calculatorHistorical) 
+      |number:3}}%</p>
     </div>
   </div>
   <div>
-    <div ng-repeat="currency in HistoricalExchangeRate">
-      {{currency.name}} - {{currency.code}} - {{currency.currentRate / calculatorHistorical}}
-    </div>
-  </div>
 </div>
