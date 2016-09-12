@@ -25,10 +25,13 @@
   })
 
   currencyApp.factory('LiveCurrencies', function($resource){
-    return $resource('/api/current-rate', {id: '@_id'}, {
-      'query': { method: 'GET',isArray: false}
-    });
+    return $resource('/api/current-rate', {}, {});
   });
+
+  currencyApp.factory('HistoricalCurrencies', function($resource){
+    return $resource('/api/historical-rate', {});
+  });
+
 
   // create the controller and inject Angular's $scope
   currencyApp.controller('MainController', function($scope, ListOfCurrencies) {
@@ -45,42 +48,5 @@
   // create the controller and inject Angular's $scope
   currencyApp.controller('CurrencyController', function($scope, ListOfCurrencies, LiveCurrencies, HistoricalCurrencies) {
 
-    var currencyWithValues = [];
-
-    $scope.ListOfCurrencies = ListOfCurrencies.query(function(data){
-      for(var i in data){
-        var currencyObject = {
-          code:data[i].cc,
-          name:data[i].name,
-          currentRate:0,
-          historicalRate:0
-        }
-        currencyWithValues.push(currencyObject);
-      }
-    });
-
-    $scope.LiveCurrencies = LiveCurrencies.query(function(data){
-
-      for(var i in data.quotes){
-
-        for(var c in currencyWithValues){
-          if(currencyWithValues[c].code === i.substring(3)){
-            currencyWithValues[c].currentRate = data.quotes[i];
-          }
-        }
-      }
-    });
-
-    $scope.HistoricalCurrencies = HistoricalCurrencies.query(function(data){
-
-      for(var i in data.quotes){
-
-        for(var c in currencyWithValues){
-          if(currencyWithValues[c].code === i.substring(3)){
-            currencyWithValues[c].historicalRate = data.quotes[i];
-          }
-        }
-      }
-    });
   });
 
