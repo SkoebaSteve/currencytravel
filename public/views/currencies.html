@@ -1,0 +1,12 @@
+<div style="display:flex">
+  <div>
+    <div ng-repeat="currency in CurrentExchangeRate">
+      {{currency.name}} - {{currency.code}} - {{currency.currentRate}}
+    </div>
+  </div>
+  <div>
+    <div ng-repeat="currency in HistoricalExchangeRate">
+      {{currency.name}} - {{currency.code}} - {{currency.currentRate}}
+    </div>
+  </div>
+</div>
