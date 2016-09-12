@@ -1,5 +1,5 @@
   // create the module and name it scotchApp
-  var currencyApp = angular.module('CurrencyApp', ['ngRoute', 'ngResource']);
+  var currencyApp = angular.module('currencyApp', ['ngRoute', 'ngResource']);
 
   // configure our routes
   currencyApp.config(function($routeProvider, $locationProvider) {
@@ -8,11 +8,11 @@
       // route for the home page
       .when('/', {
         templateUrl : 'views/home.html',
-        controller  : 'mainController'
+        controller  : 'MainController'
       })
       .when('/currency', {
         templateUrl : 'views/currencies.html',
-        controller  : 'currencyController'
+        controller  : 'CurrencyController'
       });
 
     // change urls from hashbangs
@@ -37,7 +37,7 @@
   });
 
   // create the controller and inject Angular's $scope
-  currencyApp.controller('mainController', function($scope, ListOfCurrencies) {
+  currencyApp.controller('MainController', function($scope, ListOfCurrencies) {
 
     $scope.ListOfCurrencies = ListOfCurrencies.query(function(data){
     });
@@ -49,13 +49,21 @@
   });
 
   // create the controller and inject Angular's $scope
-  currencyApp.controller('currencyController', function($scope, ListOfCurrencies, LiveCurrencies, HistoricalCurrencies) {
+  currencyApp.controller('CurrencyController', function($scope, ListOfCurrencies, LiveCurrencies, HistoricalCurrencies) {
 
+    var currencyWithValues = [];
     $scope.ListOfCurrencies = ListOfCurrencies.query(function(data){
+      for(var i in data){
+        console.log(data[i].cc);
+        // console.log(data[i].name);
+      }
     });
-    
+
     $scope.LiveCurrencies = LiveCurrencies.query(function(data){
-      console.log(data.quotes);
+      // for(var i in data.quotes){
+      //   console.log(i);
+      //   console.log(data.quotes[i]);
+      // }
     });
     $scope.HistoricalCurrencies = HistoricalCurrencies.query(function(data){});
 
