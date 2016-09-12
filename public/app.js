@@ -39,14 +39,17 @@ currencyApp.controller('MainController', function($scope, ListOfCurrencies) {
   $scope.ListOfCurrencies = ListOfCurrencies.query(function(data){
   });
 
-  $scope.findCurrencies = function(form){
-    console.log(form);
-  }
-
 });
 
 // create the controller and inject Angular's $scope
 currencyApp.controller('CurrencyController', function($scope, ListOfCurrencies, LiveCurrencies, HistoricalCurrencies) {
+  
+  $scope.ListOfCurrencies = ListOfCurrencies.query(function(data){});
+
+  $scope.update = function(){
+    console.log($scope.SelectedCurrency.cc);
+  }
+
   $scope.CurrentExchangeRate = LiveCurrencies.query(function(data){});
   $scope.HistoricalExchangeRate = HistoricalCurrencies.query(function(data){});
 });
