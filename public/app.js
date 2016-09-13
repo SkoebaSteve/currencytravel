@@ -41,6 +41,16 @@ currencyApp.controller('CurrencyController', function($scope, ListOfCurrencies, 
   
   $scope.ListOfCurrencies = ListOfCurrencies.query(function(data){});
 
+  $scope.calculatorCurrent = 0;
+  $scope.calculatorHistorical = 0;
+
+  updateRates = function(){
+    for(s in $scope.CurrentExchangeRate){
+      $scope.CurrentExchangeRate[s].currentRate = $scope.CurrentExchangeRate[s].currentRate / $scope.calculatorCurrent;
+      $scope.CurrentExchangeRate[s].historicalRate = $scope.CurrentExchangeRate[s].historicalRate / $scope.calculatorHistorical;
+    }
+  }
+
   $scope.update = function(){
 
     for(c in $scope.CurrentExchangeRate){
@@ -49,15 +59,16 @@ currencyApp.controller('CurrencyController', function($scope, ListOfCurrencies, 
         $scope.calculatorHistorical = $scope.CurrentExchangeRate[c].historicalRate;
       }
     }
-  }
 
-  $scope.calculatorCurrent = 0;
-  $scope.calculatorHistorical = 0;
+    updateRates();
+  }
 
   $scope.CurrentExchangeRate = LatestCurrencies.query(function(data){
     var currentCurrency = data.filter(function (data) { return data.code == "USD" });
     $scope.calculatorCurrent = currentCurrency[0].currentRate;
     $scope.calculatorHistorical = currentCurrency[0].historicalRate;
+    
+    updateRates();
   });
 });
 
