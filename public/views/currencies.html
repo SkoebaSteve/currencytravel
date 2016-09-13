@@ -1,15 +1,14 @@
 <select ng-model="SelectedCurrency" ng-options="item as item.name for item in ListOfCurrencies" required ng-change="update()">
-  <option value="">Select Currency</option>
+  <option default value="">Select Currency</option>
 </select>
-
-<div>
-  <table>
-    <div ng-repeat="currency in CurrentExchangeRate">
+<div class="map-container">
+  <div class="map" id="chartdiv"></div>
+  <div class="map-legend">
+    <div ng-repeat="currency in CurrentExchangeRate | orderBy:'-difference'">
       <p style="font-weight:bold">{{currency.name}} ({{currency.code}})</p>
-      <p>current Rate: {{currency.currentRate | number:4}}</p>
-      <p>historical Rate: {{currency.historicalRate | number:4}}</p>
-      <p>difference: {{ currency.difference |number:2}}%</p>
+      <p>current Rate: {{currency.currentRate | number:10}}</p>
+      <p>historical Rate: {{currency.historicalRate | number:10}}</p>
+      <p>difference: {{ currency.difference |number:10}}%</p>
     </div>
   </div>
-  <div>
 </div>

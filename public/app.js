@@ -39,15 +39,27 @@ currencyApp.controller('MainController', function($scope, ListOfCurrencies) {
 // create the controller and inject Angular's $scope
 currencyApp.controller('CurrencyController', function($scope, ListOfCurrencies, LatestCurrencies) {
   
-  $scope.ListOfCurrencies = ListOfCurrencies.query(function(data){});
-
   $scope.calculatorCurrent = 0;
   $scope.calculatorHistorical = 0;
+  var areasArray= [];
+
+
+  $scope.ListOfCurrencies = ListOfCurrencies.query(function(data){
+    
+    for(l in data){
+      if(data[l].countrycode !== ""){
+         areasArray.push({"id":data[l].countrycode});
+      }
+    }
+    console.log(areasArray);
+    generateMap();
+  });
 
   updateRates = function(){
     for(s in $scope.CurrentExchangeRate){
       $scope.CurrentExchangeRate[s].currentRate = $scope.CurrentExchangeRate[s].currentRate / $scope.calculatorCurrent;
       $scope.CurrentExchangeRate[s].historicalRate = $scope.CurrentExchangeRate[s].historicalRate / $scope.calculatorHistorical;
+      $scope.CurrentExchangeRate[s].difference = ($scope.CurrentExchangeRate[s].currentRate / $scope.CurrentExchangeRate[s].historicalRate -1) *100
     }
   }
 
@@ -67,8 +79,31 @@ currencyApp.controller('CurrencyController', function($scope, ListOfCurrencies, 
     var currentCurrency = data.filter(function (data) { return data.code == "USD" });
     $scope.calculatorCurrent = currentCurrency[0].currentRate;
     $scope.calculatorHistorical = currentCurrency[0].historicalRate;
-    
+
     updateRates();
   });
+
+  generateMap = function(){
+
+    var map = AmCharts.makeChart( "chartdiv", {
+
+      "type": "map",
+      "theme": "light",
+      "projection": "miller",
+
+      "dataProvider": {
+        "map": "worldLow",
+        "areas": areasArray
+      },
+      "areasSettings": {
+        "autoZoom": false,
+        "selectedColor": "#CC0000"
+      },
+      "export": {
+        "enabled": false,
+        "position": "bottom-right"
+      }
+    } );
+  }
 });
 
