@@ -1,0 +1,123 @@
+/*=============================================
+=            base size calculators            =
+=============================================*/
+
+@function em($px, $base: 16) {
+  @return ($px / $base) * 1em;
+}
+
+@function Rem($size) {
+  $remSize: $size / 16px;
+  @return $remSize * 1rem;
+}
+
+/*=====  End of base size calculators  ======*/
+
+/*=====================================
+=            Media queries            =
+=====================================*/
+
+
+@mixin respond-to($media) {
+  @if $media == port-mob {
+    @media only screen and ( min-width: em( 320 ) ) { @content; }
+  }
+
+  @if $media == land-mob {
+    @media only screen and ( min-width: em( 480 ) ) { @content; }
+  }
+
+  @if $media == fablet {
+    @media only screen and ( min-width: em( 572 ) ) { @content; }
+  }
+
+  @if $media == tablet {
+    @media only screen and ( min-width: em( 768 ) ) { @content; }
+  }
+
+  @else if $media == netbook {
+    @media only screen and ( min-width: em( 1025 ) ) { @content; }
+  }
+
+  @else if $media == desktop {
+    @media only screen and ( min-width: em( 1200 ) ) { @content; }
+  }
+
+  @else if $media == mega {
+    @media only screen and ( min-width: em( 1600 ) ) { @content; }
+  }
+
+  //If a tablet or smaller
+  @if $media == tablet-or-smaller {
+    @media only screen and ( max-width: em( 1024 ) ) { @content; }
+  }
+
+  //If a mobile or smaller
+  @if $media == mobile-or-smaller {
+    @media only screen and ( max-width: em( 767 ) ) { @content; }
+  }
+
+}
+
+/*=====  End of Media queries  ======*/
+
+/*====================================================
+=            mixin for offset positioning            =
+====================================================*/
+// About: http://hugogiraudel.com/2013/08/05/offsets-sass-mixin/
+
+
+@mixin position($position, $args: ()) {
+  $offsets: top right bottom left;
+  position: $position;                                               // 1
+  
+  @each $offset in $offsets {                                        // 3
+    $index: index($args, $offset);                                   // 4
+    
+    @if $index {                                                     // 5
+      @if $index == length($args) {                                  // 6
+        #{$offset}: 0;                                               // 7
+      }
+      @else {                                                        // 8
+        $next: nth($args, $index + 1);                               // 9
+        @if is-valid-length($next) {                                 // 10
+          #{$offset}: $next;                                         // 11
+        }
+        @else if index($offsets, $next) {                            // 12
+          #{$offset}: 0;                                             // 13
+        }
+        @else {                                                      // 14
+          @warn "Invalid value `#{$next}` for offset `#{$offset}`."; // 15
+        }
+      }
+    }
+  }
+}
+
+// Function checking if $value is a valid length
+// ---
+// @param [literal] $value: value to test
+// ---
+// @return [bool]
+
+@function is-valid-length($value) {
+  @return (type-of($value) == "number" and not unitless($value)) 
+       or (index(auto initial inherit 0, $value) != false);
+}
+ 
+// Shorthands
+// ---
+
+@mixin absolute($args: ()) {
+  @include position(absolute, $args);
+}
+ 
+@mixin fixed($args: ()) {
+  @include position(fixed, $args);
+}
+ 
+@mixin relative($args: ()) {
+  @include position(relative, $args);
+}
+
+/*=====  End of mixin for offset positioning  ======*/

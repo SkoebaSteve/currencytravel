@@ -39,74 +39,24 @@ currencyApp.controller('MainController', function($scope, ListOfCurrencies) {
 // create the controller and inject Angular's $scope
 currencyApp.controller('CurrencyController', function($scope, ListOfCurrencies, LatestCurrencies) {
   
+  // set two scope variables that are used for the switching of currency calculation
   $scope.calculatorCurrent = 0;
   $scope.calculatorHistorical = 0;
-  var areasArray= [];
 
-
+  // get list of currencies with their info
   $scope.ListOfCurrencies = ListOfCurrencies.query(function(data){
-
-    // for(l in data){
-    //   if(data[l].countrycode !== ""){
-    //      areasArray.push({"id":data[l].countrycode});
-    //   }
-    // }
-    // console.log(areasArray);
-    var map = AmCharts.makeChart( "chartdiv", {
-
-      "type": "map",
-      "theme": "light",
-      "projection": "miller",
-
-      "dataProvider": {
-        "map": "worldLow",
-        getAreasFromMap: true
-      },
-      "areasSettings": {
-        "autoZoom": false,
-        "color": "#CDCDCD",
-        "colorSolid": "#5EB7DE",
-        "selectedColor": "#5EB7DE",
-        "outlineColor": "#666666",
-        "rollOverColor": "#88CAE7",
-        "rollOverOutlineColor": "#FFFFFF",
-        "selectable": true
-      },
-      "listeners": [ {
-        "event": "clickMapObject",
-        "method": function( event ) {
-          // deselect the area by assigning all of the dataProvider as selected object
-          map.selectedObject = map.dataProvider;
-
-          // toggle showAsSelected
-          event.mapObject.showAsSelected = !event.mapObject.showAsSelected;
-
-          // bring it to an appropriate color
-          map.returnInitialColor( event.mapObject );
-
-          // let's build a list of currently selected states
-          var states = [];
-          for ( var i in map.dataProvider.areas ) {
-            var area = map.dataProvider.areas[ i ];
-            if ( area.showAsSelected ) {
-              states.push( area.title );
-              console.log(area[i]);
-            }
-          }
-
-          console.log(states);
-        }
-      } ]
-    });
   });
 
-  updateRates = function(){
+  // function for updating the rates
+  var updateRates = function(){
     for(s in $scope.CurrentExchangeRate){
       $scope.CurrentExchangeRate[s].currentRate = $scope.CurrentExchangeRate[s].currentRate / $scope.calculatorCurrent;
       $scope.CurrentExchangeRate[s].historicalRate = $scope.CurrentExchangeRate[s].historicalRate / $scope.calculatorHistorical;
       $scope.CurrentExchangeRate[s].difference = ($scope.CurrentExchangeRate[s].currentRate / $scope.CurrentExchangeRate[s].historicalRate -1) *100
     }
   }
+
+  // get selected currency rate from SELECT 
 
   $scope.update = function(){
 
@@ -126,6 +76,52 @@ currencyApp.controller('CurrencyController', function($scope, ListOfCurrencies, 
     $scope.calculatorHistorical = currentCurrency[0].historicalRate;
 
     updateRates();
+  });
+
+  // setup map
+  var selectedCountries = [];
+  var map = AmCharts.makeChart( "chartdiv", {
+    "type": "map",
+    "theme": "light",
+    "projection": "miller",
+
+    "dataProvider": {
+      "map": "worldLow",
+      getAreasFromMap: true
+    },
+    "areasSettings": {
+      "autoZoom": false,
+      "color": "#CDCDCD",
+      "colorSolid": "#5EB7DE",
+      "selectedColor": "#5EB7DE",
+      "outlineColor": "#666666",
+      "rollOverColor": "#88CAE7",
+      "rollOverOutlineColor": "#FFFFFF",
+      "selectable": true
+    },
+    "listeners": [ {
+      "event": "clickMapObject",
+      "method": function( event ) {
+        // deselect the area by assigning all of the dataProvider as selected object
+        map.selectedObject = map.dataProvider;
+
+        // toggle showAsSelected
+        event.mapObject.showAsSelected = !event.mapObject.showAsSelected;
+
+        // bring it to an appropriate color
+        map.returnInitialColor( event.mapObject );
+
+        // let's build a list of currently selected states
+        for ( var i in map.dataProvider.areas ) {
+          var area = map.dataProvider.areas[ i ];
+          if ( area.showAsSelected ) {
+            selectedCountries.push( area.title );
+          }
+        }
+
+        console.log(selectedCountries);
+      }
+    } ]
   });
 });
 
