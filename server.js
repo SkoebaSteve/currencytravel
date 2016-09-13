@@ -10,7 +10,7 @@ app.use(express.static('./data'));
 // all other request point to index
 
 app.get('/api/common-currency', function(req, res){
-  res.sendFile(__dirname + '/data/currencies.json');
+  res.sendFile(__dirname + '/data/countries-currencies.json');
 })
 
 app.get('/api/current-rate', function(req, res){
