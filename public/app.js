@@ -79,7 +79,6 @@ currencyApp.controller('CurrencyController', function($scope, ListOfCurrencies, 
   });
 
   // setup map
-  var selectedCountries = [];
   var map = AmCharts.makeChart( "chartdiv", {
     "type": "map",
     "theme": "light",
@@ -112,6 +111,7 @@ currencyApp.controller('CurrencyController', function($scope, ListOfCurrencies, 
         map.returnInitialColor( event.mapObject );
 
         // let's build a list of currently selected states
+        var selectedCountries = [];
         for ( var i in map.dataProvider.areas ) {
           var area = map.dataProvider.areas[ i ];
           if ( area.showAsSelected ) {
@@ -119,7 +119,15 @@ currencyApp.controller('CurrencyController', function($scope, ListOfCurrencies, 
           }
         }
 
-        console.log(selectedCountries);
+        for (s in selectedCountries){
+          console.log(selectedCountries[s]);
+          for(l in $scope.ListOfCurrencies){
+            if(selectedCountries[s] === $scope.ListOfCurrencies[l].countryName){
+              console.log($scope.ListOfCurrencies[l].countryName);
+            }
+          }
+        }
+        
       }
     } ]
   });
