@@ -6,11 +6,9 @@
   <table>
     <div ng-repeat="currency in CurrentExchangeRate">
       <p style="font-weight:bold">{{currency.name}} ({{currency.code}})</p>
-      <p>current Rate: {{currency.currentRate | number:5}}</p>
-      <p>historical Rate: {{currency.historicalRate | number:5}}</p>
-<!--       <p>difference: {{ 
-        ((currency.currentRate / calculatorCurrent) / (currency.historicalRate / calculatorHistorical) -1) *100
-      |number:1}}%</p> -->
+      <p>current Rate: {{currency.currentRate | number:4}}</p>
+      <p>historical Rate: {{currency.historicalRate | number:4}}</p>
+      <p>difference: {{ currency.difference |number:2}}%</p>
     </div>
   </div>
   <div>
