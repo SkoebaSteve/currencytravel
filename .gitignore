@@ -26,5 +26,5 @@ jspm_packages
 .npm
 
 # Ignore get latest currencies script because it has public keys in there and also the data folder with currencies
-getLatestCurrencies.js
+config.js
 data
