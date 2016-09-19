@@ -4,7 +4,7 @@
 <div class="map-container">
   <div class="map" id="chartdiv"></div>
   <div class="map-legend">
-    <div ng-repeat="currency in CurrentExchangeRate | orderBy:'-difference'" ng-show="isSelected" ng-init="isSelected = false">
+    <div ng-model="curencyList" ng-repeat="currency in SelectedCountries">
       <p style="font-weight:bold">{{currency.name}} ({{currency.code}})</p>
       <p>current Rate: {{currency.currentRate | number:10}}</p>
       <p>historical Rate: {{currency.historicalRate | number:10}}</p>

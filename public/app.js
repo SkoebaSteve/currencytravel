@@ -43,8 +43,26 @@ currencyApp.controller('CurrencyController', function($scope, ListOfCurrencies, 
   $scope.calculatorCurrent = 0;
   $scope.calculatorHistorical = 0;
 
+  // use this later for all selected countries
+  $scope.SelectedCountries = [];
+
   // get list of currencies with their info
   $scope.ListOfCurrencies = ListOfCurrencies.query(function(data){
+  });
+
+  $scope.CurrentExchangeRate = LatestCurrencies.query(function(data){
+    var currentCurrency = data.filter(function (data) { return data.code == "USD" });
+    $scope.calculatorCurrent = currentCurrency[0].currentRate;
+    $scope.calculatorHistorical = currentCurrency[0].historicalRate;
+
+    for(d in data){
+      for(l in $scope.ListOfCurrencies){
+        if($scope.ListOfCurrencies[l].cc === data[d].code){
+          data[d].countryName = $scope.ListOfCurrencies[l].countryName;
+        }
+      }
+    }
+    updateRates();
   });
 
   // function for updating the rates
@@ -52,7 +70,7 @@ currencyApp.controller('CurrencyController', function($scope, ListOfCurrencies, 
     for(s in $scope.CurrentExchangeRate){
       $scope.CurrentExchangeRate[s].currentRate = $scope.CurrentExchangeRate[s].currentRate / $scope.calculatorCurrent;
       $scope.CurrentExchangeRate[s].historicalRate = $scope.CurrentExchangeRate[s].historicalRate / $scope.calculatorHistorical;
-      $scope.CurrentExchangeRate[s].difference = ($scope.CurrentExchangeRate[s].currentRate / $scope.CurrentExchangeRate[s].historicalRate -1) *100
+      $scope.CurrentExchangeRate[s].difference = ($scope.CurrentExchangeRate[s].currentRate / $scope.CurrentExchangeRate[s].historicalRate -1) *100;
     }
   }
 
@@ -69,14 +87,6 @@ currencyApp.controller('CurrencyController', function($scope, ListOfCurrencies, 
 
     updateRates();
   }
-
-  $scope.CurrentExchangeRate = LatestCurrencies.query(function(data){
-    var currentCurrency = data.filter(function (data) { return data.code == "USD" });
-    $scope.calculatorCurrent = currentCurrency[0].currentRate;
-    $scope.calculatorHistorical = currentCurrency[0].historicalRate;
-
-    updateRates();
-  });
 
   // setup map
   var map = AmCharts.makeChart( "chartdiv", {
@@ -110,24 +120,21 @@ currencyApp.controller('CurrencyController', function($scope, ListOfCurrencies, 
         // bring it to an appropriate color
         map.returnInitialColor( event.mapObject );
 
+        var selectedCountriesArray = [];
         // let's build a list of currently selected states
-        var selectedCountries = [];
-        for ( var i in map.dataProvider.areas ) {
-          var area = map.dataProvider.areas[ i ];
-          if ( area.showAsSelected ) {
-            selectedCountries.push( area.title );
-          }
-        }
-
-        for (s in selectedCountries){
-          console.log(selectedCountries[s]);
-          for(l in $scope.ListOfCurrencies){
-            if(selectedCountries[s] === $scope.ListOfCurrencies[l].countryName){
-              console.log($scope.ListOfCurrencies[l].countryName);
+        for (var i in map.dataProvider.areas) {
+          var area = map.dataProvider.areas[i];
+          if (area.showAsSelected) {
+            for(s in $scope.CurrentExchangeRate){
+              if(area.title === $scope.CurrentExchangeRate[s].countryName){
+                selectedCountriesArray.push($scope.CurrentExchangeRate[s]);
+              }
             }
           }
         }
-        
+
+        $scope.SelectedCountries = selectedCountriesArray;
+        console.log($scope.SelectedCountries);
       }
     } ]
   });
